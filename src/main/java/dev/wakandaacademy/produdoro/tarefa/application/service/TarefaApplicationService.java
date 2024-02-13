@@ -58,7 +58,9 @@ public class TarefaApplicationService implements TarefaService {
     @Override
     public void alteraTarefa(String emailUsuario, UUID idTarefa, AlteraTarefaRequest alteraTarefaRequest) {
         log.info("[inicia] TarefaApplicationService - alteraTarefa");
-
+        Tarefa tarefa = detalhaTarefa(emailUsuario,idTarefa);
+        tarefa.alteraTarefa(alteraTarefaRequest);
+        tarefaRepository.salva(tarefa);
         log.info("[finaliza] TarefaApplicationService - alteraTarefa");
 
     }
