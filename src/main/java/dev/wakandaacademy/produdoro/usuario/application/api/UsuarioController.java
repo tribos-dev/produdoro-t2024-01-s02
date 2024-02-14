@@ -37,6 +37,7 @@ public class UsuarioController implements UsuarioAPI {
 	@Override
 	public void alterarStatusParaFoco(String token, UUID idUsuario) {
 		log.info("[inicia] UsuarioController - alterarStatusParaFoco");
+		usuarioAppplicationService.alterarStatusParaFoco(token, idUsuario);
 		log.info("[finaliza] UsuarioController - alterarStatusParaFoco");
 	}
 
