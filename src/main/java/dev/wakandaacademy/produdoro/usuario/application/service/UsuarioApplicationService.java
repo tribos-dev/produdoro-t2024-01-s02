@@ -43,5 +43,9 @@ public class UsuarioApplicationService implements UsuarioService {
 		return new UsuarioCriadoResponse(usuario);
 	}
 
-
+	@Override
+	public void mudaStatusParaPausaCurta(UUID idUsuario, String usuario) {
+		log.info("[inicia] UsuarioApplicationService - mudaStatusParaPausaCurta");
+		log.info("[finaliza] UsuarioApplicationService - mudaStatusParaPausaCurta");
+	}
 }
