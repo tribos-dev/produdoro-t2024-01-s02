@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -54,7 +55,7 @@ public class TarefaApplicationService implements TarefaService {
         log.info("[finaliza] TarefaApplicationService - listaTodasTarefasDoUsuario");
         return TarefaDetalhadoResponse.converte(tarefasDoUsuario);
     }
-
+    @Transactional
     @Override
     public void alteraTarefa(String emailUsuario, UUID idTarefa, AlteraTarefaRequest alteraTarefaRequest) {
         log.info("[inicia] TarefaApplicationService - alteraTarefa");

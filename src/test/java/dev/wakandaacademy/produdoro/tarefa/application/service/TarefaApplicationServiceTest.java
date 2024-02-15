@@ -1,6 +1,7 @@
 package dev.wakandaacademy.produdoro.tarefa.application.service;
 
 import dev.wakandaacademy.produdoro.DataHelper;
+import dev.wakandaacademy.produdoro.handler.APIException;
 import dev.wakandaacademy.produdoro.tarefa.application.api.AlteraTarefaRequest;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaIdResponse;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaRequest;
@@ -13,12 +14,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -68,4 +69,22 @@ class TarefaApplicationServiceTest {
         verify(tarefaRepository, times(1)).salva(tarefa);
 
     }
+
+    @Test
+    void deveRetornarExceptionQuandoIdTarefaForInvalido(){
+        UUID idTarefa = UUID.randomUUID();
+        Usuario usuario = DataHelper.createUsuario();
+        AlteraTarefaRequest request = DataHelper.createAlteraTarefaRequest();
+
+        when(usuarioRepository.buscaUsuarioPorEmail(any())).thenReturn(usuario);
+        when(tarefaRepository.buscaTarefaPorId(idTarefa)).thenReturn(Optional.empty());
+
+        APIException ex = assertThrows(APIException.class, () -> {
+            tarefaApplicationService.alteraTarefa(usuario.getEmail(), idTarefa, request);
+        });
+
+        assertEquals("Tarefa não encontrada!", ex.getMessage());
+        assertEquals(HttpStatus.NOT_FOUND, ex.getStatusException());
+    }
+
 }

@@ -1,8 +1,5 @@
 package dev.wakandaacademy.produdoro;
 
-import java.util.List;
-import java.util.UUID;
-
 import dev.wakandaacademy.produdoro.pomodoro.domain.ConfiguracaoPadrao;
 import dev.wakandaacademy.produdoro.tarefa.application.api.AlteraTarefaRequest;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaRequest;
@@ -11,6 +8,9 @@ import dev.wakandaacademy.produdoro.tarefa.domain.Tarefa;
 import dev.wakandaacademy.produdoro.usuario.application.api.UsuarioNovoRequest;
 import dev.wakandaacademy.produdoro.usuario.domain.StatusUsuario;
 import dev.wakandaacademy.produdoro.usuario.domain.Usuario;
+
+import java.util.List;
+import java.util.UUID;
 
 public class DataHelper {
 
@@ -25,7 +25,7 @@ public class DataHelper {
                 .idUsuario(usuario1).descricao("descricao tarefa").statusAtivacao(StatusAtivacaoTarefa.INATIVA).build();
     }
     public static AlteraTarefaRequest createAlteraTarefaRequest() {
-        return AlteraTarefaRequest.builder().descricao("Nova descriçao").build();
+        return  new AlteraTarefaRequest("descricao tarefa");
     }
 
     public static UsuarioNovoRequest getUsuarioRequest() {
