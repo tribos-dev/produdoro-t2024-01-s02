@@ -1,6 +1,7 @@
 package dev.wakandaacademy.produdoro.tarefa.application.service;
 
 import dev.wakandaacademy.produdoro.DataHelper;
+import dev.wakandaacademy.produdoro.handler.APIException;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaDetalhadoResponse;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaIdResponse;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaRequest;
@@ -8,11 +9,13 @@ import dev.wakandaacademy.produdoro.tarefa.application.repository.TarefaReposito
 import dev.wakandaacademy.produdoro.tarefa.domain.Tarefa;
 import dev.wakandaacademy.produdoro.usuario.application.repository.UsuarioRepository;
 import dev.wakandaacademy.produdoro.usuario.domain.Usuario;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 
 import java.util.List;
 import java.util.UUID;
@@ -71,6 +74,20 @@ class TarefaApplicationServiceTest {
         verify(tarefaRepository,times(1)).listaTodasTarefasDoUsuario(idUsuario);
     }
 
+    @Test
+    void deveRetornarExceptionQuandoIdForInvalido(){
+        Usuario usuarioEmail = DataHelper.createUsuario();
+        Usuario usuario = Usuario.builder().idUsuario(UUID.randomUUID()).build();
+
+        when(usuarioRepository.buscaUsuarioPorEmail(any())).thenReturn(usuarioEmail);
+        when(usuarioRepository.buscaUsuarioPorId(any(UUID.class))).thenReturn(usuario);
+
+        APIException ex = Assertions.assertThrows(APIException.class, () -> {
+            tarefaApplicationService.listaTodasTarefasDoUsuario(usuarioEmail.getEmail(), usuario.getIdUsuario());
+    });
+        assertEquals("credencial de autenticação não e valida", ex.getMessage());
+        assertEquals(HttpStatus.UNAUTHORIZED, ex.getStatusException());
+    }
     
 
 }
