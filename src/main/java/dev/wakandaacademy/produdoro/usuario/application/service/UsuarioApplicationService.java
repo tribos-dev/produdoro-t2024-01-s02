@@ -34,11 +34,10 @@ public class UsuarioApplicationService implements UsuarioService {
 		return new UsuarioCriadoResponse(usuario);
 	}
 
-
 	@Override
 	public UsuarioCriadoResponse buscaUsuarioPorId(UUID idUsuario) {
 		log.info("[inicia] UsuarioApplicationService - buscaUsuarioPorId");
-		Usuario usuario = usuarioRepository.buscaUsuarioPorId(idUsuario);
+ 		Usuario usuario = usuarioRepository.buscaUsuarioPorId(idUsuario);
 		log.info("[finaliza] UsuarioApplicationService - buscaUsuarioPorId");
 		return new UsuarioCriadoResponse(usuario);
 	}
