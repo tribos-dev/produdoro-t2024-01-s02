@@ -46,7 +46,6 @@ public class UsuarioRepositoryMongoDB implements UsuarioRepository {
 	@Override
 	public void alterarStatusParaFoco(Usuario usuario) {
 		log.info("[inicia] UsuarioRepositoryMongoDB - alterarStatusParaFoco");
-		usuario.alterarStatusFoco();
 		usuarioMongoRepository.save(usuario);
 		log.info("[finaliza] UsuarioRepositoryMongoDB - alterarStatusParaFoco");
 	}
