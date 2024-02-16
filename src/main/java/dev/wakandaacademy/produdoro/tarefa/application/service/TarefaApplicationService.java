@@ -40,4 +40,15 @@ public class TarefaApplicationService implements TarefaService {
         log.info("[finaliza] TarefaApplicationService - detalhaTarefa");
         return tarefa;
     }
+
+    @Override
+    public void deletaTarefa(String usuario, UUID idTarefa) {
+        log.info("[inicia] TarefaApplicationService - deletaTarefa");
+        Usuario usuarioEmail = usuarioRepository.buscaUsuarioPorEmail(usuario);
+        Tarefa tarefa = tarefaRepository.buscaTarefaPorId(idTarefa).orElseThrow(() ->
+                APIException.build(HttpStatus.NOT_FOUND, "Tarefa não encontrada!"));
+        tarefa.pertenceAoUsuario(usuarioEmail);
+        tarefaRepository.deleta(usuarioEmail, tarefa);
+        log.info("[finaliza] TarefaApplicationService - deletaTarefa");
+    }
 }
