@@ -20,5 +20,6 @@ public interface UsuarioAPI {
 
 	@PatchMapping(value = "/{idUsuario}")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
-	void usuarioMudaStatusParaPausaCurta(@RequestHeader(name = "Authorization",required = true) String token, @PathVariable UUID idUsuario);
+	void usuarioMudaStatusParaPausaCurta(@RequestHeader(name = "Authorization",required = true) String token,
+										@PathVariable UUID idUsuario);
 }
