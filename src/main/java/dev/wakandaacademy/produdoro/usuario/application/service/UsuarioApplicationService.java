@@ -4,6 +4,7 @@ import javax.validation.Valid;
 
 import dev.wakandaacademy.produdoro.config.security.service.TokenService;
 import dev.wakandaacademy.produdoro.usuario.application.repository.UsuarioRepository;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
 import dev.wakandaacademy.produdoro.credencial.application.service.CredencialService;
@@ -23,7 +24,6 @@ public class UsuarioApplicationService implements UsuarioService {
 	private final PomodoroService pomodoroService;
 	private final CredencialService credencialService;
 	private final UsuarioRepository usuarioRepository;
-	private final TokenService tokenService;
 
 	@Override
 	public UsuarioCriadoResponse criaNovoUsuario(@Valid UsuarioNovoRequest usuarioNovo) {
@@ -45,13 +45,18 @@ public class UsuarioApplicationService implements UsuarioService {
 		return new UsuarioCriadoResponse(usuario);
 	}
 
+	@SneakyThrows
 	@Override
 	public void alteraStatusParaFoco(String usuario, UUID idUsuario) {
 		log.info("[inicia] UsuarioApplicationService - alteraStatusParaFoco");
-		Usuario usuarioEmail = usuarioRepository.buscaUsuarioPorEmail(usuario);
-		usuarioRepository.buscaUsuarioPorId(idUsuario);
-		usuarioEmail.alteraStatusFoco(idUsuario); //valida se o idUsuario, é o mesmo usuario do TOKEN //verificar se essa linha nao da erro?
-		usuarioRepository.salva(usuarioEmail);
+		try {
+			Usuario usuarioEmail = usuarioRepository.buscaUsuarioPorEmail(usuario);
+			usuarioRepository.buscaUsuarioPorId(idUsuario);
+			usuarioEmail.alteraStatusFoco(idUsuario);
+			usuarioRepository.salva(usuarioEmail);
+		} catch (Exception e) {
+			throw new Exception();
+		}
 		log.info("[finaliza] UsuarioApplicationService - alteraStatusParaFoco");
 	}
 }
