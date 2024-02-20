@@ -43,24 +43,40 @@ public class Usuario {
 		this.status = StatusUsuario.FOCO;
 		this.configuracao = new ConfiguracaoUsuario(configuracaoPadrao);
 	}
+
 	public void validaUsuario(UUID idUsuario) {
 		if (!this.idUsuario.equals(idUsuario)) {
 			throw APIException.build(HttpStatus.UNAUTHORIZED, "Credencial de autenticação não é válida");
 		}
 	}
+
 	public void alteraStatusFoco(UUID idUsuario) {
 		validaUsuario(idUsuario);
 		mudaStatusParaFoco();
 	}
+
     private  StatusUsuario mudaStatusParaFoco() {
 		if (this.status.equals(StatusUsuario.FOCO)) {
 			throw APIException.build(HttpStatus.CONFLICT, "Status do usuário já está em foco");
 		}
 		return this.status = StatusUsuario.FOCO;
 	}
+	
     public void validaUsuario(Usuario usuario) {
 		if (!this.idUsuario.equals(usuario.getIdUsuario())){
 		throw APIException.build(HttpStatus.UNAUTHORIZED, "credencial de autenticação não e valida");
 		}
-    }
+	}
+
+	public void alteraStatusPausaLonga(UUID idUsuario) {
+		validaUsuario(idUsuario);
+		mudaStatusParaPausaLonga();
+	}
+
+	private StatusUsuario mudaStatusParaPausaLonga() {
+		if (this.status.equals(StatusUsuario.PAUSA_LONGA)) {
+			throw APIException.build(HttpStatus.CONFLICT, "Usuário já está em Pausa Longa.");
+		}
+		return this.status = StatusUsuario.PAUSA_LONGA;
+	}
 }

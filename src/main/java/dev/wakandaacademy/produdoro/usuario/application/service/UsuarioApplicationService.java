@@ -45,7 +45,6 @@ public class UsuarioApplicationService implements UsuarioService {
 		return new UsuarioCriadoResponse(usuario);
 	}
 
-	@SneakyThrows
 	@Override
 	public void alteraStatusParaFoco(String usuario, UUID idUsuario) {
 		log.info("[inicia] UsuarioApplicationService - alteraStatusParaFoco");
@@ -55,5 +54,14 @@ public class UsuarioApplicationService implements UsuarioService {
 			usuarioEmail.alteraStatusFoco(idUsuario);
 			usuarioRepository.salva(usuarioEmail);
 		log.info("[finaliza] UsuarioApplicationService - alteraStatusParaFoco");
+	}
+
+	@Override
+	public void alteraStatusParaPausaLonga(String usuarioEmail, UUID idUsuario) {
+		log.info("[inicia] UsuarioApplicationService - alteraStatusParaPausaLonga");
+		Usuario usuario = usuarioRepository.buscaUsuarioPorEmail(usuarioEmail);
+		usuario.alteraStatusPausaLonga(idUsuario);
+		usuarioRepository.salva(usuario);
+		log.info("[finaliza] UsuarioApplicationService - alteraStatusParaPausaLonga");
 	}
 }

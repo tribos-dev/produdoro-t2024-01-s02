@@ -48,5 +48,12 @@ public class UsuarioController implements UsuarioAPI {
 		log.info("[finaliza] UsuarioController - alterarStatusParaFoco");
 	}
 
-
+	public void patchAlteraStatusParaPausaLonga(String token, UUID idUsuario) {
+		log.info("[inicia] UsuarioController - patchAlteraStatusParaPausaLonga");
+		log.info("[idUsuario] {}", idUsuario);
+		String usuarioEmail = tokenService.getUsuarioByBearerToken(token)
+				.orElseThrow(() -> APIException.build(HttpStatus.FORBIDDEN, "Token inválido."));
+		usuarioAppplicationService.alteraStatusParaPausaLonga(usuarioEmail, idUsuario);
+		log.info("[finaliza] UsuarioController - patchAlteraStatusParaPausaLonga");
+	}
 }
