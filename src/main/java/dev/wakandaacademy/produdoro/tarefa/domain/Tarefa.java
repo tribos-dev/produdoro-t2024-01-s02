@@ -3,7 +3,6 @@ package dev.wakandaacademy.produdoro.tarefa.domain;
 import java.util.UUID;
 
 import dev.wakandaacademy.produdoro.handler.APIException;
-import dev.wakandaacademy.produdoro.tarefa.application.api.AlteraTarefaRequest;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaRequest;
 import dev.wakandaacademy.produdoro.usuario.domain.Usuario;
 
@@ -55,9 +54,5 @@ public class Tarefa {
 		if(!this.idUsuario.equals(usuarioPorEmail.getIdUsuario())) {
 			throw APIException.build(HttpStatus.UNAUTHORIZED, "Usuário não é dono da Tarefa solicitada!");
 		}
-	}
-
-	public void alteraTarefa(AlteraTarefaRequest alteraTarefaRequest) {
-		this.descricao = alteraTarefaRequest.getDescricao();
 	}
 }
