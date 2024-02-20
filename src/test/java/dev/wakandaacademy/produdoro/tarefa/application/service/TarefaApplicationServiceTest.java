@@ -1,26 +1,20 @@
 package dev.wakandaacademy.produdoro.tarefa.application.service;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
-import java.util.Optional;
-import java.util.UUID;
-
-import dev.wakandaacademy.produdoro.DataHelper;
-import dev.wakandaacademy.produdoro.handler.APIException;
-import dev.wakandaacademy.produdoro.usuario.application.repository.UsuarioRepository;
-import dev.wakandaacademy.produdoro.usuario.domain.Usuario;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import org.junit.jupiter.api.Assertions;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -28,12 +22,16 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
+import dev.wakandaacademy.produdoro.DataHelper;
+import dev.wakandaacademy.produdoro.handler.APIException;
 import dev.wakandaacademy.produdoro.tarefa.application.api.AlteraTarefaRequest;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaDetalhadoResponse;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaIdResponse;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaRequest;
 import dev.wakandaacademy.produdoro.tarefa.application.repository.TarefaRepository;
 import dev.wakandaacademy.produdoro.tarefa.domain.Tarefa;
+import dev.wakandaacademy.produdoro.usuario.application.repository.UsuarioRepository;
+import dev.wakandaacademy.produdoro.usuario.domain.Usuario;
 
 @ExtendWith(MockitoExtension.class)
 class TarefaApplicationServiceTest {
