@@ -3,6 +3,7 @@ package dev.wakandaacademy.produdoro.tarefa.application.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.CALLS_REAL_METHODS;
@@ -22,6 +23,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import dev.wakandaacademy.produdoro.DataHelper;
+import dev.wakandaacademy.produdoro.handler.APIException;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaIdResponse;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaRequest;
 import dev.wakandaacademy.produdoro.tarefa.application.repository.TarefaRepository;
@@ -76,5 +78,15 @@ class TarefaApplicationServiceTest {
     	tarefaApplicationService.ativaTarefa(usuarioRequest.getEmail(), idTarefa);
     	verify(tarefaRepository,times(1)).buscaTarefaPorId(idTarefa);
     	assertEquals(StatusAtivacaoTarefa.ATIVA, tarefaRequest.getStatusAtivacao());
+    }
+    
+    @Test
+    void deveRetornarTarefaAtivaException() {
+    	UUID idTarefaInvalido = UUID.fromString("06fb5521-9d5a-461a-82fb-e67e3bedc6eb");
+    	
+    	Usuario usuarioRequest = DataHelper.createUsuario();
+    	
+    	when(tarefaRepository.buscaTarefaPorId(idTarefaInvalido)).thenThrow(APIException.class);
+    	assertThrows(APIException.class, () -> tarefaApplicationService.ativaTarefa(usuarioRequest.getEmail(), idTarefaInvalido));
     }
 }
