@@ -31,6 +31,5 @@ public interface TarefaAPI {
     
     @PatchMapping("/{idTarefa}")
     ResponseEntity<String> ativaTarefa(@RequestHeader(name = "Authorization",required = true) String token, 
-    		@PathVariable UUID idTarefa, @RequestParam UUID idUsuario);
-
+    		@PathVariable UUID idTarefa);
 }

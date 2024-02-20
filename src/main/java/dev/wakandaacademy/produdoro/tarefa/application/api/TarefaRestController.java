@@ -44,10 +44,10 @@ public class TarefaRestController implements TarefaAPI {
 	}
 
 	@Override
-	public ResponseEntity<String> ativaTarefa(String token, UUID idTarefa, UUID idUsuario) {
+	public ResponseEntity<String> ativaTarefa(String token, UUID idTarefa) {
 		log.info("[inicia] TarefaRestController - ativaTarefa");
 		String usuario = getUsuarioByToken(token);
-		tarefaService.ativaTarefa(usuario, idTarefa, idUsuario);
+		tarefaService.ativaTarefa(usuario, idTarefa);
 		log.info("[finaliza] TarefaRestController - ativaTarefa");
 		return ResponseEntity.ok("Tarefa Ativada com Sucesso!");
 	}
