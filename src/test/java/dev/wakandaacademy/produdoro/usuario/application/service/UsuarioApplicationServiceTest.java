@@ -78,7 +78,7 @@ public class UsuarioApplicationServiceTest {
 
     @Test
     void deveAlterarStatusParaPausaLonga() {
-        Usuario usuario = DataHelper.createUsuario();
+        Usuario usuario = DataHelper.createUsuarioFoco();
         when(usuarioRepository.salva(any())).thenReturn(usuario);
         when(usuarioRepository.buscaUsuarioPorEmail(any())).thenReturn(usuario);
         usuarioApplicationService.alteraStatusParaPausaLonga(usuario.getEmail(), usuario.getIdUsuario());
@@ -91,13 +91,13 @@ public class UsuarioApplicationServiceTest {
         when(usuarioRepository.buscaUsuarioPorEmail(any())).thenReturn(usuario);
         APIException exception = assertThrows(APIException.class, () ->
                 usuarioApplicationService.alteraStatusParaPausaLonga("mathias@gmail.com", UUID.randomUUID()));
-        assertEquals("Credencial de autenticação não é valida", exception.getMessage());
+        assertEquals("credencial de autenticação não e valida", exception.getMessage());
         assertEquals(HttpStatus.UNAUTHORIZED, exception.getStatusException());
     }
 
     @Test
     void statusJaEstaEmPausaLonga() {
-        Usuario usuario = DataHelper.createUsuario();
+        Usuario usuario = DataHelper.createUsuarioFoco();
         when(usuarioRepository.buscaUsuarioPorEmail(any())).thenReturn(usuario);
         usuarioApplicationService.alteraStatusParaPausaLonga(usuario.getEmail(), usuario.getIdUsuario());
         APIException exception = assertThrows(APIException.class,
