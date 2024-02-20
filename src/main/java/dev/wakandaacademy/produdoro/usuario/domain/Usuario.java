@@ -57,5 +57,10 @@ public class Usuario {
 			throw APIException.build(HttpStatus.CONFLICT, "Status do usuário já está em foco");
 		}
 		return this.status = StatusUsuario.FOCO;
+
+    public void validaUsuario(Usuario usuario) {
+		if (!this.idUsuario.equals(usuario.getIdUsuario())){
+		throw APIException.build(HttpStatus.UNAUTHORIZED, "credencial de autenticação não e valida");
+		}
     }
 }
