@@ -36,13 +36,23 @@ public class UsuarioApplicationService implements UsuarioService {
 		return new UsuarioCriadoResponse(usuario);
 	}
 
-
 	@Override
 	public UsuarioCriadoResponse buscaUsuarioPorId(UUID idUsuario) {
 		log.info("[inicia] UsuarioApplicationService - buscaUsuarioPorId");
-		Usuario usuario = usuarioRepository.buscaUsuarioPorId(idUsuario);
+ 		Usuario usuario = usuarioRepository.buscaUsuarioPorId(idUsuario);
 		log.info("[finaliza] UsuarioApplicationService - buscaUsuarioPorId");
 		return new UsuarioCriadoResponse(usuario);
+	}
+
+	@Override
+	public void mudaStatusParaPausaCurta(UUID idUsuario, String emailUsuario) {
+		log.info("[inicia] UsuarioApplicationService - mudaStatusParaPausaCurta");
+		Usuario usuarioPorEmail = usuarioRepository.buscaUsuarioPorEmail(emailUsuario);
+		usuarioRepository.buscaUsuarioPorId(idUsuario);
+		usuarioPorEmail.validaUsuario(idUsuario);
+		usuarioPorEmail.mudaParaPausaCurta();
+		usuarioRepository.salva(usuarioPorEmail);
+		log.info("[finaliza] UsuarioApplicationService - mudaStatusParaPausaCurta");
 	}
 
 	@Override

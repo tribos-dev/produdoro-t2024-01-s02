@@ -9,6 +9,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import dev.wakandaacademy.produdoro.handler.APIException;
 import dev.wakandaacademy.produdoro.pomodoro.domain.ConfiguracaoPadrao;
 import dev.wakandaacademy.produdoro.usuario.application.api.UsuarioNovoRequest;
 import lombok.AccessLevel;
@@ -45,9 +46,14 @@ public class Usuario {
 	}
 
 	public void validaUsuario(UUID idUsuario) {
-		if (!this.idUsuario.equals(idUsuario)) {
-			throw APIException.build(HttpStatus.UNAUTHORIZED, "Credencial de autenticação não é válida");
+		if(!this.idUsuario.equals(idUsuario)) {
+			throw APIException.build(HttpStatus.UNAUTHORIZED,
+					"Credencial de autenticação não é válida!");
 		}
+	}
+
+	public void mudaParaPausaCurta() {
+		this.status = StatusUsuario.PAUSA_CURTA;
 	}
 
 	public void alteraStatusFoco(UUID idUsuario) {

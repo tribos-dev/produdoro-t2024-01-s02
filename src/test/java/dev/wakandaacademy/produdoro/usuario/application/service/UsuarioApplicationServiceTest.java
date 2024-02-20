@@ -21,6 +21,7 @@ import dev.wakandaacademy.produdoro.DataHelper;
 import dev.wakandaacademy.produdoro.handler.APIException;
 import dev.wakandaacademy.produdoro.usuario.application.repository.UsuarioRepository;
 import dev.wakandaacademy.produdoro.usuario.domain.Usuario;
+import dev.wakandaacademy.produdoro.usuario.domain.StatusUsuario;
 
 @ExtendWith(MockitoExtension.class)
 public class UsuarioApplicationServiceTest {
@@ -97,5 +98,19 @@ public class UsuarioApplicationServiceTest {
 				() -> usuarioApplicationService.alteraStatusParaPausaLonga(usuario.getEmail(), usuario.getIdUsuario()));
 		assertEquals("Usuário já está em Pausa Longa.", exception.getMessage());
 		assertEquals(HttpStatus.CONFLICT, exception.getStatusException());
+	}
+
+	@Test
+	void deveMudarStatusParaPausaCurta() {
+		//Given
+		Usuario usuario = DataHelper.createUsuario();
+		//When
+		when(usuarioRepository.buscaUsuarioPorEmail(any())).thenReturn(usuario);
+		usuarioApplicationService.mudaStatusParaPausaCurta(usuario.getIdUsuario(), usuario.getEmail());
+		//Then
+		verify(usuarioRepository, times(1)).buscaUsuarioPorEmail(any());
+		verify(usuarioRepository, times(1)).buscaUsuarioPorId(any());
+		verify(usuarioRepository, times(1)).salva(any());
+		assertEquals(StatusUsuario.PAUSA_CURTA, usuario.getStatus());
 	}
 }
