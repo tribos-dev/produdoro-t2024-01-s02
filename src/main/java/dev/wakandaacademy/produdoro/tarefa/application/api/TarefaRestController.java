@@ -38,12 +38,12 @@ public class TarefaRestController implements TarefaAPI {
 	}
 
 	@Override
-	public void alteraTarefa(String token, UUID idTarefa, AlteraTarefaRequest alteraTarefaRequest) {
-		log.info("[inicia] TarefaRestController - alteraTarefa");
+	public List<TarefaDetalhadoResponse> listaTodasTarefasDoUsuario(String token, UUID idUsuario) {
+		log.info("[inicia] TarefaRestController - listaTodasTarefasDoUsuario");
 		String emailUsuario = getUsuarioByToken(token);
-		tarefaService.alteraTarefa(emailUsuario, idTarefa, alteraTarefaRequest);
-		log.info("[finaliza] TarefaRestController - alteraTarefa");
-
+		List<TarefaDetalhadoResponse> listaTarefas = tarefaService.listaTodasTarefasDoUsuario(emailUsuario,idUsuario);
+		log.info("[finaliza] TarefaRestController - listaTodasTarefasDoUsuario");
+		return listaTarefas ;
 	}
 
 	private String getUsuarioByToken(String token) {

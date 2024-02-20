@@ -1,16 +1,15 @@
 package dev.wakandaacademy.produdoro;
 
+import java.util.List;
+import java.util.UUID;
+
 import dev.wakandaacademy.produdoro.pomodoro.domain.ConfiguracaoPadrao;
-import dev.wakandaacademy.produdoro.tarefa.application.api.AlteraTarefaRequest;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaRequest;
 import dev.wakandaacademy.produdoro.tarefa.domain.StatusAtivacaoTarefa;
 import dev.wakandaacademy.produdoro.tarefa.domain.Tarefa;
 import dev.wakandaacademy.produdoro.usuario.application.api.UsuarioNovoRequest;
 import dev.wakandaacademy.produdoro.usuario.domain.StatusUsuario;
 import dev.wakandaacademy.produdoro.usuario.domain.Usuario;
-
-import java.util.List;
-import java.util.UUID;
 
 public class DataHelper {
 
@@ -40,10 +39,6 @@ public class DataHelper {
 
         TarefaRequest tarefaReq = new TarefaRequest("descricao", usuario.getIdUsuario(), null, null, 1);
         return tarefaReq;
-    }
-
-    public static AlteraTarefaRequest createAlteraTarefaRequest() {
-        return  new AlteraTarefaRequest("descricao tarefa");
     }
 
     public static List<Tarefa> createListTarefa() {
