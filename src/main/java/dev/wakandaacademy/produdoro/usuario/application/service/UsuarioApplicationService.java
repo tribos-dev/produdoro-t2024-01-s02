@@ -49,14 +49,11 @@ public class UsuarioApplicationService implements UsuarioService {
 	@Override
 	public void alteraStatusParaFoco(String usuario, UUID idUsuario) {
 		log.info("[inicia] UsuarioApplicationService - alteraStatusParaFoco");
-		try {
 			Usuario usuarioEmail = usuarioRepository.buscaUsuarioPorEmail(usuario);
+			log.info(usuarioEmail.toString());
 			usuarioRepository.buscaUsuarioPorId(idUsuario);
 			usuarioEmail.alteraStatusFoco(idUsuario);
 			usuarioRepository.salva(usuarioEmail);
-		} catch (Exception e) {
-			throw new Exception();
-		}
 		log.info("[finaliza] UsuarioApplicationService - alteraStatusParaFoco");
 	}
 }
