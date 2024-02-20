@@ -41,17 +41,17 @@ public class TarefaInfraRepository implements TarefaRepository {
     }
 
     @Override
-<<<<<<< HEAD
     public void deletaTarefa(Tarefa tarefa) {
         log.info("[inicia] TarefaInfraRepository - deleta");
         tarefaSpringMongoDBRepository.delete(tarefa);
         log.info("[finaliza] TarefaInfraRepository - deleta");
-=======
+    }
+
+    @Override
     public List<Tarefa> listaTodasTarefasDoUsuario(UUID idUsuario) {
         log.info("[inicia] TarefaInfraRepository - listaTodasTarefasDoUsuario");
         List<Tarefa> tarefas = tarefaSpringMongoDBRepository.findAllByIdUsuario(idUsuario);
         log.info("[finaliza] TarefaInfraRepository - listaTodasTarefasDoUsuario");
         return tarefas;
->>>>>>> dev
     }
 }

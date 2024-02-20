@@ -36,7 +36,7 @@ public interface TarefaAPI {
 
     @GetMapping("/usuario/{idUsuario}")
     @ResponseStatus(code = HttpStatus.OK)
-    List<TarefaDetalhadoResponse> listaTodasTarefasDoUsuario (@RequestHeader(name = "Authorization",required = true) String token,
+    List<TarefaDetalhadoResponse> listaTodasTarefasDoUsuario(@RequestHeader(name = "Authorization",required = true) String token,
                                                               @PathVariable UUID idUsuario);
     @PatchMapping("/{idTarefa}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)

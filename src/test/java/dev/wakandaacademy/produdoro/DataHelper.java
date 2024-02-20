@@ -54,4 +54,8 @@ public class DataHelper {
 
         );
     }
+
+    public static AlteraTarefaRequest createAlteraTarefaRequest() {
+        return new AlteraTarefaRequest("tarefa alterada...");
+    }
 }
