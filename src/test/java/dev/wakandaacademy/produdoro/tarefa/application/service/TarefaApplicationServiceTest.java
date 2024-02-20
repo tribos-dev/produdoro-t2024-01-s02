@@ -125,7 +125,7 @@ class TarefaApplicationServiceTest {
 		APIException ex = Assertions.assertThrows(APIException.class, () -> {
 			tarefaApplicationService.listaTodasTarefasDoUsuario(usuarioEmail.getEmail(), usuario.getIdUsuario());
 		});
-		assertEquals("credencial de autenticação não e valida", ex.getMessage());
+		assertEquals("Credencial de autenticação não é válida", ex.getMessage());
 		assertEquals(HttpStatus.UNAUTHORIZED, ex.getStatusException());
 	}
 
