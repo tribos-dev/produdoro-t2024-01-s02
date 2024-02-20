@@ -42,4 +42,11 @@ public class UsuarioRepositoryMongoDB implements UsuarioRepository {
 		log.info("[finaliza] UsuarioRepositoryMongoDB - buscaUsuarioPorEmail");
 		return usuario;
 	}
+
+	@Override
+	public void alterarStatusParaFoco(Usuario usuario) {
+		log.info("[inicia] UsuarioRepositoryMongoDB - alterarStatusParaFoco");
+		usuarioMongoRepository.save(usuario);
+		log.info("[finaliza] UsuarioRepositoryMongoDB - alterarStatusParaFoco");
+	}
 }

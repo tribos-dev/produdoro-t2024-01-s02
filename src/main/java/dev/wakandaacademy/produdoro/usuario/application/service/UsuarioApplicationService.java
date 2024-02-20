@@ -2,7 +2,9 @@ package dev.wakandaacademy.produdoro.usuario.application.service;
 
 import javax.validation.Valid;
 
+import dev.wakandaacademy.produdoro.config.security.service.TokenService;
 import dev.wakandaacademy.produdoro.usuario.application.repository.UsuarioRepository;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
 import dev.wakandaacademy.produdoro.credencial.application.service.CredencialService;
@@ -34,14 +36,42 @@ public class UsuarioApplicationService implements UsuarioService {
 		return new UsuarioCriadoResponse(usuario);
 	}
 
-
 	@Override
 	public UsuarioCriadoResponse buscaUsuarioPorId(UUID idUsuario) {
 		log.info("[inicia] UsuarioApplicationService - buscaUsuarioPorId");
-		Usuario usuario = usuarioRepository.buscaUsuarioPorId(idUsuario);
+ 		Usuario usuario = usuarioRepository.buscaUsuarioPorId(idUsuario);
 		log.info("[finaliza] UsuarioApplicationService - buscaUsuarioPorId");
 		return new UsuarioCriadoResponse(usuario);
 	}
 
+	@Override
+	public void mudaStatusParaPausaCurta(UUID idUsuario, String emailUsuario) {
+		log.info("[inicia] UsuarioApplicationService - mudaStatusParaPausaCurta");
+		Usuario usuarioPorEmail = usuarioRepository.buscaUsuarioPorEmail(emailUsuario);
+		usuarioRepository.buscaUsuarioPorId(idUsuario);
+		usuarioPorEmail.validaUsuario(idUsuario);
+		usuarioPorEmail.mudaParaPausaCurta();
+		usuarioRepository.salva(usuarioPorEmail);
+		log.info("[finaliza] UsuarioApplicationService - mudaStatusParaPausaCurta");
+	}
 
+	@Override
+	public void alteraStatusParaFoco(String usuario, UUID idUsuario) {
+		log.info("[inicia] UsuarioApplicationService - alteraStatusParaFoco");
+			Usuario usuarioEmail = usuarioRepository.buscaUsuarioPorEmail(usuario);
+			log.info(usuarioEmail.toString());
+			usuarioRepository.buscaUsuarioPorId(idUsuario);
+			usuarioEmail.alteraStatusFoco(idUsuario);
+			usuarioRepository.salva(usuarioEmail);
+		log.info("[finaliza] UsuarioApplicationService - alteraStatusParaFoco");
+	}
+
+	@Override
+	public void alteraStatusParaPausaLonga(String usuarioEmail, UUID idUsuario) {
+		log.info("[inicia] UsuarioApplicationService - alteraStatusParaPausaLonga");
+		Usuario usuario = usuarioRepository.buscaUsuarioPorEmail(usuarioEmail);
+		usuario.alteraStatusPausaLonga(idUsuario);
+		usuarioRepository.salva(usuario);
+		log.info("[finaliza] UsuarioApplicationService - alteraStatusParaPausaLonga");
+	}
 }
