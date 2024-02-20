@@ -33,24 +33,32 @@ public class TarefaApplicationService implements TarefaService {
 		return TarefaIdResponse.builder().idTarefa(tarefaCriada.getIdTarefa()).build();
 	}
 
-	@Override
-	public Tarefa detalhaTarefa(String usuario, UUID idTarefa) {
-		log.info("[inicia] TarefaApplicationService - detalhaTarefa");
-		Usuario usuarioPorEmail = usuarioRepository.buscaUsuarioPorEmail(usuario);
-		log.info("[usuarioPorEmail] {}", usuarioPorEmail);
-		Tarefa tarefa = tarefaRepository.buscaTarefaPorId(idTarefa)
-				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Tarefa não encontrada!"));
-		tarefa.pertenceAoUsuario(usuarioPorEmail);
-		log.info("[finaliza] TarefaApplicationService - detalhaTarefa");
-		return tarefa;
-	}
+    @Override
+    public Tarefa detalhaTarefa(String usuario, UUID idTarefa) {
+        log.info("[inicia] TarefaApplicationService - detalhaTarefa");
+        Usuario usuarioPorEmail = usuarioRepository.buscaUsuarioPorEmail(usuario);
+        log.info("[usuarioPorEmail] {}", usuarioPorEmail);
+        Tarefa tarefa =
+                tarefaRepository.buscaTarefaPorId(idTarefa).orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Tarefa não encontrada!"));
+        tarefa.pertenceAoUsuario(usuarioPorEmail);
+        log.info("[finaliza] TarefaApplicationService - detalhaTarefa");
+        return tarefa;
+    }
+
+    @Override
+    public void deletaTarefa(String usuario, UUID idTarefa) {
+        log.info("[inicia] TarefaApplicationService - deletaTarefa");
+        Tarefa tarefa = detalhaTarefa(usuario, idTarefa);
+        tarefaRepository.deletaTarefa(tarefa);
+        log.info("[finaliza] TarefaApplicationService - deletaTarefa");
+    }
 
 	@Override
 	public List<TarefaDetalhadoResponse> listaTodasTarefasDoUsuario(String emailUsuario, UUID idUsuario) {
 		log.info("[inicia] TarefaApplicationService - listaTodasTarefasDoUsuario");
 		Usuario usuarioToken = usuarioRepository.buscaUsuarioPorEmail(emailUsuario);
 		Usuario usuario = usuarioRepository.buscaUsuarioPorId(idUsuario);
-		usuario.validaUsuario(usuarioToken);
+		usuario.validaUsuario(usuarioToken.getIdUsuario());
 		List<Tarefa> tarefasDoUsuario = tarefaRepository.listaTodasTarefasDoUsuario(usuario.getIdUsuario());
 		log.info("[finaliza] TarefaApplicationService - listaTodasTarefasDoUsuario");
 		return TarefaDetalhadoResponse.converte(tarefasDoUsuario);
