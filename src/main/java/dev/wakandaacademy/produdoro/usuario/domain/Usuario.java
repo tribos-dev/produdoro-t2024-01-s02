@@ -46,7 +46,6 @@ public class Usuario {
 	}
 
 	public void validaUsuario(UUID idUsuario) {
-<<<<<<< HEAD
 		if(!this.idUsuario.equals(idUsuario)) {
 			throw APIException.build(HttpStatus.UNAUTHORIZED,
 					"Credencial de autenticação não é válida!");
@@ -55,10 +54,6 @@ public class Usuario {
 
 	public void mudaParaPausaCurta() {
 		this.status = StatusUsuario.PAUSA_CURTA;
-=======
-		if (!this.idUsuario.equals(idUsuario)) {
-			throw APIException.build(HttpStatus.UNAUTHORIZED, "Credencial de autenticação não é válida");
-		}
 	}
 
 	public void alteraStatusFoco(UUID idUsuario) {
@@ -89,6 +84,5 @@ public class Usuario {
 			throw APIException.build(HttpStatus.CONFLICT, "Usuário já está em Pausa Longa.");
 		}
 		return this.status = StatusUsuario.PAUSA_LONGA;
->>>>>>> dev
 	}
 }
