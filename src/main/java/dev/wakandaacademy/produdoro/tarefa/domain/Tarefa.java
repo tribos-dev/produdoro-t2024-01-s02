@@ -56,7 +56,9 @@ public class Tarefa {
 			throw APIException.build(HttpStatus.UNAUTHORIZED, "Usuário não é dono da Tarefa solicitada!");
 		}
 	}
-
+    public void incrementaPomodoro() {
+        this.contagemPomodoro++;
+    }
 	public void alteraTarefa(AlteraTarefaRequest alteraTarefaRequest) {
 		this.descricao = alteraTarefaRequest.getDescricao();
 	}
