@@ -33,33 +33,43 @@ public class TarefaApplicationService implements TarefaService {
 		return TarefaIdResponse.builder().idTarefa(tarefaCriada.getIdTarefa()).build();
 	}
 
-    @Override
-    public Tarefa detalhaTarefa(String usuario, UUID idTarefa) {
-        log.info("[inicia] TarefaApplicationService - detalhaTarefa");
-        Usuario usuarioPorEmail = usuarioRepository.buscaUsuarioPorEmail(usuario);
-        log.info("[usuarioPorEmail] {}", usuarioPorEmail);
-        Tarefa tarefa =
-                tarefaRepository.buscaTarefaPorId(idTarefa).orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Tarefa não encontrada!"));
-        tarefa.pertenceAoUsuario(usuarioPorEmail);
-        log.info("[finaliza] TarefaApplicationService - detalhaTarefa");
-        return tarefa;
-    }
+	@Override
+	public Tarefa detalhaTarefa(String usuario, UUID idTarefa) {
+		log.info("[inicia] TarefaApplicationService - detalhaTarefa");
+		Usuario usuarioPorEmail = usuarioRepository.buscaUsuarioPorEmail(usuario);
+		log.info("[usuarioPorEmail] {}", usuarioPorEmail);
+		Tarefa tarefa = tarefaRepository.buscaTarefaPorId(idTarefa)
+				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Tarefa não encontrada!"));
+		tarefa.pertenceAoUsuario(usuarioPorEmail);
+		log.info("[finaliza] TarefaApplicationService - detalhaTarefa");
+		return tarefa;
+	}
 
-    @Override
-    public void incrementaPomodoro(String usuario, UUID idTarefa) {
-        log.info("[inicia] TarefaApplicationService - incrementaPomodoro");
-        Tarefa tarefa = detalhaTarefa(usuario, idTarefa);
-        tarefa.incrementaPomodoro();
-        tarefaRepository.salva(tarefa);
-        log.info("[finaliza] TarefaApplicationService - incrementaPomodoro");
-    }
+	@Override
+	public void ativaTarefa(String usuario, UUID idTarefa) {
+		log.info("[inicia] TarefaApplicationService - ativaTarefa");
+		Tarefa tarefa = detalhaTarefa(usuario, idTarefa);
+		tarefaRepository.desativaTarefasAtiva(tarefa.getIdUsuario());
+		tarefa.ativaTarefa();
+		tarefaRepository.salva(tarefa);
+		log.info("[finaliza] TarefaApplicationService - ativaTarefa");
+	}
 
-    public void deletaTarefa(String usuario, UUID idTarefa) {
-        log.info("[inicia] TarefaApplicationService - deletaTarefa");
-        Tarefa tarefa = detalhaTarefa(usuario, idTarefa);
-        tarefaRepository.deletaTarefa(tarefa);
-        log.info("[finaliza] TarefaApplicationService - deletaTarefa");
-    }
+	@Override
+	public void incrementaPomodoro(String usuario, UUID idTarefa) {
+		log.info("[inicia] TarefaApplicationService - incrementaPomodoro");
+		Tarefa tarefa = detalhaTarefa(usuario, idTarefa);
+		tarefa.incrementaPomodoro();
+		tarefaRepository.salva(tarefa);
+		log.info("[finaliza] TarefaApplicationService - incrementaPomodoro");
+	}
+
+	public void deletaTarefa(String usuario, UUID idTarefa) {
+		log.info("[inicia] TarefaApplicationService - deletaTarefa");
+		Tarefa tarefa = detalhaTarefa(usuario, idTarefa);
+		tarefaRepository.deletaTarefa(tarefa);
+		log.info("[finaliza] TarefaApplicationService - deletaTarefa");
+	}
 
 	@Override
 	public List<TarefaDetalhadoResponse> listaTodasTarefasDoUsuario(String emailUsuario, UUID idUsuario) {

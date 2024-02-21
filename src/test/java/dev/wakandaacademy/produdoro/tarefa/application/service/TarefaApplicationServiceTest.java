@@ -1,15 +1,20 @@
 package dev.wakandaacademy.produdoro.tarefa.application.service;
 
-import dev.wakandaacademy.produdoro.DataHelper;
-import dev.wakandaacademy.produdoro.handler.APIException;
-import dev.wakandaacademy.produdoro.tarefa.application.api.AlteraTarefaRequest;
-import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaDetalhadoResponse;
-import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaIdResponse;
-import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaRequest;
-import dev.wakandaacademy.produdoro.tarefa.application.repository.TarefaRepository;
-import dev.wakandaacademy.produdoro.tarefa.domain.Tarefa;
-import dev.wakandaacademy.produdoro.usuario.application.repository.UsuarioRepository;
-import dev.wakandaacademy.produdoro.usuario.domain.Usuario;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,13 +23,17 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
+import dev.wakandaacademy.produdoro.DataHelper;
+import dev.wakandaacademy.produdoro.handler.APIException;
+import dev.wakandaacademy.produdoro.tarefa.application.api.AlteraTarefaRequest;
+import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaDetalhadoResponse;
+import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaIdResponse;
+import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaRequest;
+import dev.wakandaacademy.produdoro.tarefa.application.repository.TarefaRepository;
+import dev.wakandaacademy.produdoro.tarefa.domain.StatusAtivacaoTarefa;
+import dev.wakandaacademy.produdoro.tarefa.domain.Tarefa;
+import dev.wakandaacademy.produdoro.usuario.application.repository.UsuarioRepository;
+import dev.wakandaacademy.produdoro.usuario.domain.Usuario;
 
 @ExtendWith(MockitoExtension.class)
 class TarefaApplicationServiceTest {
@@ -33,6 +42,7 @@ class TarefaApplicationServiceTest {
 	@InjectMocks
 	TarefaApplicationService tarefaApplicationService;
 
+	// @MockBean
 	@Mock
 	TarefaRepository tarefaRepository;
 
@@ -55,7 +65,6 @@ class TarefaApplicationServiceTest {
 	void deveDeletarTarefa() {
 		Usuario usuario = DataHelper.createUsuario();
 		Tarefa tarefa = DataHelper.createTarefa();
-
 		when(usuarioRepository.buscaUsuarioPorEmail(eq(usuario.getEmail()))).thenReturn(usuario);
 		when(tarefaRepository.buscaTarefaPorId(eq(tarefa.getIdTarefa()))).thenReturn(Optional.of(tarefa));
 
@@ -64,6 +73,39 @@ class TarefaApplicationServiceTest {
 		verify(usuarioRepository, times(1)).buscaUsuarioPorEmail(eq(usuario.getEmail()));
 		verify(tarefaRepository, times(1)).buscaTarefaPorId(eq(tarefa.getIdTarefa()));
 		verify(tarefaRepository, times(1)).deletaTarefa(tarefa);
+
+	}
+
+	public TarefaRequest getTarefaRequest() {
+		TarefaRequest request = new TarefaRequest("tarefa 1", UUID.randomUUID(), null, null, 0);
+		return request;
+	}
+
+	@Test
+	void deveRetornarTarefaAtiva() {
+		UUID idTarefa = UUID.fromString("06fb5521-9d5a-461a-82fb-e67e3bedc6eb");
+		String email = "email@email.com";
+
+		Usuario usuarioRequest = DataHelper.createUsuario();
+		Tarefa tarefaRequest = DataHelper.createTarefa();
+
+		when(usuarioRepository.buscaUsuarioPorEmail(email)).thenReturn(usuarioRequest);
+		when(tarefaRepository.buscaTarefaPorId(idTarefa)).thenReturn(Optional.of(tarefaRequest));
+		tarefaApplicationService.ativaTarefa(usuarioRequest.getEmail(), idTarefa);
+		verify(tarefaRepository, times(1)).buscaTarefaPorId(idTarefa);
+		assertEquals(StatusAtivacaoTarefa.ATIVA, tarefaRequest.getStatusAtivacao());
+	}
+
+	@Test
+	void deveRetornarTarefaAtivaException() {
+		UUID idTarefaInvalido = UUID.fromString("06fb5521-9d5a-461a-82fb-e67e3bedc6eb");
+
+		Usuario usuarioRequest = DataHelper.createUsuario();
+
+		when(tarefaRepository.buscaTarefaPorId(idTarefaInvalido)).thenThrow(APIException.class);
+		assertThrows(APIException.class,
+				() -> tarefaApplicationService.ativaTarefa(usuarioRequest.getEmail(), idTarefaInvalido));
+
 	}
 
 	@Test
@@ -99,11 +141,6 @@ class TarefaApplicationServiceTest {
 		verify(usuarioRepository, times(1)).buscaUsuarioPorEmail(eq(usuario.getEmail()));
 		verify(tarefaRepository, times(1)).buscaTarefaPorId(eq(idTarefa));
 		verify(tarefaRepository, never()).deletaTarefa(any());
-	}
-
-	public TarefaRequest getTarefaRequest() {
-		TarefaRequest request = new TarefaRequest("tarefa 1", UUID.randomUUID(), null, null, 0);
-		return request;
 	}
 
 	@Test
