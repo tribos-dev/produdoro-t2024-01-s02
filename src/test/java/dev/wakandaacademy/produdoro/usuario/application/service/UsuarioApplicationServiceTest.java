@@ -56,7 +56,6 @@ public class UsuarioApplicationServiceTest {
 //		assertEquals("Status do usuário já está em foco", exception.getMessage());
 //		assertEquals(HttpStatus.CONFLICT, exception.getStatusException());
 //	}
-	
 
 	@Test
 	public void usuarioPassaTokenInvalidoParaMudarFocoTest() {
@@ -64,9 +63,8 @@ public class UsuarioApplicationServiceTest {
 
 		when(usuarioRepository.buscaUsuarioPorEmail(any())).thenReturn(usuarioTestRequest);
 		APIException exception = assertThrows(APIException.class,
-				() -> usuarioApplicationService
-				.alteraStatusParaFoco("catharina@gmail.com", UUID.randomUUID()));
-		assertEquals("Credencial de autenticação não é válida", exception.getMessage());
+				() -> usuarioApplicationService.alteraStatusParaFoco("catharina@gmail.com", UUID.randomUUID()));
+		assertEquals("Credencial de autenticação não é válida!", exception.getMessage());
 		assertEquals(HttpStatus.UNAUTHORIZED, exception.getStatusException());
 	}
 
@@ -85,7 +83,7 @@ public class UsuarioApplicationServiceTest {
 		when(usuarioRepository.buscaUsuarioPorEmail(any())).thenReturn(usuario);
 		APIException exception = assertThrows(APIException.class,
 				() -> usuarioApplicationService.alteraStatusParaPausaLonga("mathias@gmail.com", UUID.randomUUID()));
-		assertEquals("Credencial de autenticação não é válida", exception.getMessage());
+		assertEquals("Credencial de autenticação não é válida!", exception.getMessage());
 		assertEquals(HttpStatus.UNAUTHORIZED, exception.getStatusException());
 	}
 
@@ -102,12 +100,12 @@ public class UsuarioApplicationServiceTest {
 
 	@Test
 	void deveMudarStatusParaPausaCurta() {
-		//Given
+		// Given
 		Usuario usuario = DataHelper.createUsuario();
-		//When
+		// When
 		when(usuarioRepository.buscaUsuarioPorEmail(any())).thenReturn(usuario);
 		usuarioApplicationService.mudaStatusParaPausaCurta(usuario.getIdUsuario(), usuario.getEmail());
-		//Then
+		// Then
 		verify(usuarioRepository, times(1)).buscaUsuarioPorEmail(any());
 		verify(usuarioRepository, times(1)).buscaUsuarioPorId(any());
 		verify(usuarioRepository, times(1)).salva(any());
