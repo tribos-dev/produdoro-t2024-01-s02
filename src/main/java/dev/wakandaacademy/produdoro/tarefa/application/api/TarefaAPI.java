@@ -30,7 +30,7 @@ public interface TarefaAPI {
 	TarefaDetalhadoResponse detalhaTarefa(@RequestHeader(name = "Authorization", required = true) String token,
 			@PathVariable UUID idTarefa);
 
-	@PatchMapping("/{idTarefa}")
+	@PatchMapping("/{idTarefa}/ativaTarefa")
 	ResponseEntity<String> ativaTarefa(@RequestHeader(name = "Authorization", required = true) String token,
 			@PathVariable UUID idTarefa);
 
