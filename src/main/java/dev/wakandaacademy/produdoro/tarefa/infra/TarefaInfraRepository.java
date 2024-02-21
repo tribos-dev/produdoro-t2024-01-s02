@@ -1,5 +1,6 @@
 package dev.wakandaacademy.produdoro.tarefa.infra;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -58,5 +59,20 @@ public class TarefaInfraRepository implements TarefaRepository {
 		Update update = new Update().set(STATUS_ATIVACAO_FIELD, StatusAtivacaoTarefa.INATIVA);
 		mongoTemplate.updateMulti(query, update, Tarefa.class);
 		log.info("[finaliza] TarefaInfraRepository - desativaTarefasAtiva");
+	}
+
+	@Override
+	public void deletaTarefa(Tarefa tarefa) {
+		log.info("[inicia] TarefaInfraRepository - deleta");
+		tarefaSpringMongoDBRepository.delete(tarefa);
+		log.info("[finaliza] TarefaInfraRepository - deleta");
+	}
+
+	@Override
+	public List<Tarefa> listaTodasTarefasDoUsuario(UUID idUsuario) {
+		log.info("[inicia] TarefaInfraRepository - listaTodasTarefasDoUsuario");
+		List<Tarefa> tarefas = tarefaSpringMongoDBRepository.findAllByIdUsuario(idUsuario);
+		log.info("[finaliza] TarefaInfraRepository - listaTodasTarefasDoUsuario");
+		return tarefas;
 	}
 }
